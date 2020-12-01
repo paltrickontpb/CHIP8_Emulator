@@ -2,14 +2,20 @@
 // Created by Paltrickontpb on 27-11-2020.
 //
 #include "chip8keyboard.h"
+#include<assert.h>
 
 static void key_in_bound(int key){
     assert(key>=0 && key<KEYBOARD_SIZE);
 }
 
-int chip8_keyboard_map(const char *map, char key){
+void chip8_keyboard_set_map(struct chip8_keyboard *keyboard, const char *map){
+    keyboard->keyboard_mapp = map;
+}
+
+
+int chip8_keyboard_map(struct chip8_keyboard *keyboard, char key){
     for (int i=0; i<KEYBOARD_SIZE; i++){
-        if(map[i] == key) return i;
+        if(keyboard->keyboard_mapp[i] == key) return i;
     }
     return -1;
 }
