@@ -65,14 +65,14 @@ int main(int argc, char **argv) {
             switch(event.type){
                 case SDL_QUIT:
                     goto out;
-                    //break;
+                    break;
                 case SDL_KEYDOWN:
                     int pkey = chip8_keyboard_map(&chip8.keyboard, event.key.keysym.sym);
                     if (pkey != -1) chip8_keyboard_down(&chip8.keyboard, pkey);
                     break;
                 case SDL_KEYUP:
                     int upkey = chip8_keyboard_map(&chip8.keyboard, event.key.keysym.sym);
-                    if (upkey != -1) chip8_keyboard_down(&chip8.keyboard, upkey);
+                    if (upkey != -1) chip8_keyboard_up(&chip8.keyboard, upkey);
                     break;
             }
         }

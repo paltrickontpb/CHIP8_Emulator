@@ -22,7 +22,7 @@ const char chip8_default_character_set[] = {
         0xf0, 0x90, 0xf0, 0x10, 0xf0,
         0xf0, 0x90, 0xf0, 0x90, 0x90,
         0xe0, 0x90, 0xe0, 0x90, 0xe0,
-        0xf0, 0x80, 0x80, 0x80, 0xe0,
+        0xf0, 0x80, 0x80, 0x80, 0xf0,
         0xe0, 0x90, 0x90, 0x90, 0xe0,
         0xf0, 0x80, 0xf0, 0x80, 0xf0,
         0xf0, 0x80, 0xf0, 0x80, 0x80
@@ -177,14 +177,14 @@ static void chip8_adv_opcode_exec(struct chip8 *chip8, unsigned short opcode){
             break;
         case 0xC000:
             srand(clock());
-            chip8->registers.V[x] = (rand()%256) & kk;
+            chip8->registers.V[x] = (rand() % 255) & kk;
             break;
         case 0xD000:
             const char *sprite = (const char*)&chip8->memory.memory[chip8->registers.I];
             chip8->registers.V[0x0f] = chip8_screen_draw_sprite(&chip8->screen, chip8->registers.V[x], chip8->registers.V[y], sprite, n);
             break;
         case 0xE000:
-            switch(opcode & 0xFF){
+            switch(opcode & 0x00FF){
                 case 0x9E:
                     if (chip8_is_keyboard_down(&chip8->keyboard, chip8->registers.V[x])) chip8->registers.PC += 2;
                     break;

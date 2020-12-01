@@ -664,13 +664,17 @@ config.h
 
 ../include/config.h
 
-D:/Projects/Chip8/main.c
-stdio.h
+D:/Projects/Chip8/chip8.c
+chip8.h
+D:/Projects/Chip8/chip8.h
+memory.h
+D:/Projects/Chip8/memory.h
+assert.h
+-
+stdlib.h
+-
+time.h
 -
 SDL/SDL.h
 D:/Projects/Chip8/SDL/SDL.h
-chip8.h
-D:/Projects/Chip8/chip8.h
-Windows.h
--
 
