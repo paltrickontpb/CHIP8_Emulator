@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdbool.h>
+//#include <stdbool.h>
 #include "SDL/SDL.h"
 #include "chip8.h"
 #include <Windows.h>
@@ -13,9 +13,40 @@ const char keyboard_mapp[KEYBOARD_SIZE] = {
 
 int main(int argc, char **argv) {
 
+    if(argc < 2){
+        printf("Please enter a File Name! \n");
+        return -1;
+    }
+
+    const char *filename = argv[1];
+    printf("File Passed to Arg : %s\n", filename);
+
+    FILE *f = fopen(filename, "rb");
+
+    if(!f){
+        printf("Failed to load %s\n", filename);
+        fclose(f);
+        return -1;
+    }
+
+    fseek(f, 0, SEEK_END);
+    long size = ftell(f);
+    fseek(f, 0, SEEK_SET);
+    printf("Size of file : %lu\n", size);
+
+    char buf[CHIP8_MEMORY_SIZE-CHIP8_PROG_LD_ADDR];
+    int result = fread(buf, size, 1, f);
+
+    if(result != 1){
+        printf("Data not readable! :(\n");
+        fclose(f);
+        return -1;
+    }
+
     struct chip8 chip8;
     chip8_init(&chip8);
-    chip8.registers.st = 30;
+    chip8_load(&chip8, &buf, size);
+
     chip8_screen_draw_sprite(&chip8.screen, 62, 0, &chip8.memory.memory[0x00], 5);
 
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -35,13 +66,13 @@ int main(int argc, char **argv) {
             switch(event.type){
                 case SDL_QUIT:
                     goto out;
-                    break;
+                    //break;
                 case SDL_KEYDOWN:
-                    int pkey = chip8_keyboard_map(&keyboard_mapp, event.key.keysym.sym);
+                    int pkey = chip8_keyboard_map(keyboard_mapp, event.key.keysym.sym);
                     if (pkey != -1) chip8_keyboard_down(&chip8.keyboard, pkey);
                     break;
                 case SDL_KEYUP:
-                    int upkey = chip8_keyboard_map(&keyboard_mapp, event.key.keysym.sym);
+                    int upkey = chip8_keyboard_map(keyboard_mapp, event.key.keysym.sym);
                     if (upkey != -1) chip8_keyboard_down(&chip8.keyboard, upkey);
                     break;
             }
@@ -75,6 +106,10 @@ int main(int argc, char **argv) {
             Beep(15000, 100 * chip8.registers.st);
             chip8.registers.st -= 1;
         }
+
+        unsigned short opcode = chip8_memory_get_short(&chip8.memory, chip8.registers.PC);
+        chip8_exec(&chip8, opcode);
+        chip8.registers.PC += 2;
 
     }
 

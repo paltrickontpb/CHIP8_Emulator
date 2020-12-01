@@ -17,3 +17,9 @@ unsigned char chip8_memory_get(struct chip8_memory *memory, int index){
     return memory->memory[index];
 }
 
+unsigned short chip8_memory_get_short(struct chip8_memory *memory, int index){
+    unsigned char b1 = chip8_memory_get(memory, index);
+    unsigned char b2 = chip8_memory_get(memory, index+1);
+    return (b1<<8 | b2);
+}
+

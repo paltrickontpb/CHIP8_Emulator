@@ -635,6 +635,8 @@ chip8keyboard.h
 ../include/chip8keyboard.h
 chip8screen.h
 ../include/chip8screen.h
+stddef.h
+-
 
 ../include/chip8keyboard.h
 config.h
@@ -664,8 +666,6 @@ config.h
 
 D:/Projects/Chip8/main.c
 stdio.h
--
-stdbool.h
 -
 SDL/SDL.h
 D:/Projects/Chip8/SDL/SDL.h
